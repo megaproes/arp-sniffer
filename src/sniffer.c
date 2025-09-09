@@ -14,7 +14,34 @@
 #include <netinet/in.h>
 #include <arpa/inet.h>
 
+static int bind_to_iface(int fd, const char *ifname, int promisc) {
+    unsigned ifindex = if_nametoindex(ifname);
+    if (ifindex == 0) {
+        perror("if_nametoindex");
+        return -1;
+    }
 
+    if (promisc) {
+        struct packet_mreq mreq = {0};
+        mreq.mr_ifindex = ifindex;
+        mreq.mr_type = PACKET_MR_PROMISC;
+        if (setsockopt(fd, SOL_PACKET, PACKET_ADD_MEMBERSHIP, &mreq, sizeof(mreq)) < 0) {
+            perror("setsockopt(PROMISC)");
+            return -1;
+        }
+    }
+
+    struct sockaddr_ll sll = {0};
+    sll.sll_family   = AF_PACKET;
+    sll.sll_protocol = htons(ETH_P_ARP);
+    sll.sll_ifindex  = (int)ifindex; // check if cast is correct
+
+    if (bind(fd, (struct sockaddr*)&sll, sizeof(sll)) < 0) {
+        perror("bind");
+        return -1;
+    }
+    return 0;
+}
 
 int start_sniffer(const char *ifname, int promiscuous, int count) {
     int fd = socket(AF_PACKET, SOCK_RAW, htons(ETH_P_ARP));
