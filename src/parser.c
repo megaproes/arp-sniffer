@@ -1,8 +1,6 @@
 #include "parser.h"
 #include <string.h>
 #include <stdio.h>
-#define ETH_HDR_LEN 14
-#define ARP_LEN     28
 
 int parse_arp(const uint8_t *packet, size_t len, struct arp_info *out) {
     if (!packet || !out) return -1;
