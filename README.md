@@ -21,6 +21,12 @@ sudo ./arp-sniffer \
 > ```sudo setcap cap_net_raw=eip ./arp-sniffer```
 
 ---
+## Demo
+
+![ARP sniffer demo](docs/demo.gif)
+
+---
+---
 
 ## TODO
 
