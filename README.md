@@ -1,92 +1,40 @@
 # arp-sniffer
 
-Minimal ARP sniffer written in C for Linux using raw `AF_PACKET` sockets.
-Small codebase, simple build. Prints ARP requests/replies from a given interface.
+Minimal ARP sniffer for Linux built on raw `AF_PACKET` sockets.
+Parses ARP requests/replies and prints them in **text**, **CSV**, or **JSON**.
+Supports auto-picking a sane default interface and optional promiscuous mode.
 
 ---
 
-## Features
+## Quick start
 
-* Captures ARP frames (EtherType `0x0806`) via `AF_PACKET`.
-* Parses request/reply and prints human-readable lines.
-* Optional promiscuous mode to see broadcasts and replies.
-* Parser covered by unit tests (cmocka).
+```bash
+make                      # build
+sudo ./arp-sniffer \
+  [-i IFACE] [-n COUNT] \
+  [-f text|csv|json] [-P|--no-promisc]
+# use -h/--help for details
+```
+
+> Requires Linux and a C toolchain. Run as root or grant the binary `CAP_NET_RAW`:
+>
+> ```sudo setcap cap_net_raw=eip ./arp-sniffer```
 
 ---
 
-## Requirements
+## TODO
 
-* Linux
-* `gcc` / `make`
-* Root privileges or `CAP_NET_RAW` (for raw sockets)
-  Example:
-  `sudo setcap cap_net_raw=eip ./arp-sniffer`
-* (For tests) `cmocka`
-
----
-
-## Build
-
-```bash
-# build app only (default)
-make
-
-# build tests (requires cmocka)
-make test
-
-# clean
-make clean
-```
-
-Manual:
-
-```bash
-gcc -Wall -O2 -Iinclude -o arp-sniffer \
-  src/main.c src/sniffer.c src/parser.c src/utils.c
-```
-
-Tests:
-
-```bash
-gcc -Iinclude -o test_parser tests/test_parser.c src/parser.c -lcmocka
-./test_parser
-```
+* [x] GARP detection
+  \- Request where `SPA == TPA` and dest MAC is broadcast
+* [x] **Structured output**: CSV/JSON as option
+* [x] *CLI options*\*: `-i <iface>`, `-p/--no-promisc`, `-c <count>`, `-f json|text`
+* [ ] **Stats & detection**: Track `(IP => MAC)` mappings, detect duplicates, add counters.
+* [ ] **Filtering**: optional BPF/cls filter for selective capture.
+* [ ] **Tests**: more parser cases (replies, truncation, wrong EtherType, invalid fields).
+* [ ] **Portability**: currently Linux-only; add Windows later.
+* [ ] Add optional **tcpdump**-style 'who-has'/'is-at' output
 
 ---
-
-## Run
-
-```bash
-sudo ./arp-sniffer <iface>
-```
-
-Example:
-
-```bash
-sudo ./arp-sniffer enp1s0
-```
-
-Sample output:
-
-```
-ARP request: Who has 192.168.0.1? Tell 192.168.0.100 (src 02:2a:99:fa:2d:af)
-ARP reply: 192.168.0.1 is at 58:47:ad:82:12:62
-```
-
----
-
-## Roadmap / TODO
-
-* **GARP detection**
-
-  * Request where `SPA == TPA` and dest MAC is broadcast.
-  * Reply/announcement where `SPA == TPA` and `THA` is broadcast or zeroed.
-* **Structured output**: CSV/JSON instead of plain text.
-* **CLI options**: `-i <iface>`, `-p/--no-promisc`, `-c <count>`, `-o json|text`, `--stats`.
-* **Stats & detection**: Track `(IP => MAC)` mappings, detect duplicates, add counters.
-* **Filtering**: optional BPF/cls filter for selective capture.
-* **Tests**: more parser cases (replies, truncation, wrong EtherType, invalid fields).
-* **Portability**: currently Linux-only; add Windows later.
 
 ## License
 
