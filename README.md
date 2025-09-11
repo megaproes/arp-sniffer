@@ -1,16 +1,15 @@
 # arp-sniffer
 
 Minimal ARP sniffer written in C for Linux using raw `AF_PACKET` sockets.
-Small codebase, simple build. Prints ARP requests/replies from a given interface.
+Prints ARP requests/replies from a given interface.
 
 ---
 
 ## Features
 
 * Captures ARP frames (EtherType `0x0806`) via `AF_PACKET`.
-* Parses request/reply and prints human-readable lines.
+* Parses requests/replies and prints in Wireshark-like style.
 * Optional promiscuous mode to see broadcasts and replies.
-* Parser covered by unit tests (cmocka).
 
 ---
 
@@ -75,18 +74,18 @@ ARP reply: 192.168.0.1 is at 58:47:ad:82:12:62
 
 ---
 
-## Roadmap / TODO
+## TODO
 
-* **GARP detection**
+- [x] GARP detection
+      - Request where `SPA == TPA` and dest MAC is broadcast
+- [ ] **Structured output**: CSV/JSON as option 
+- [ ] *CLI options**: `-i <iface>`, `-p/--no-promisc`, `-c <count>`, `-o json|text`, `--stats`
+- [ ] **Stats & detection**: Track `(IP => MAC)` mappings, detect duplicates, add counters.
+- [ ] **Filtering**: optional BPF/cls filter for selective capture.
+- [ ] **Tests**: more parser cases (replies, truncation, wrong EtherType, invalid fields).
+- [ ] **Portability**: currently Linux-only; add Windows later.
+- [ ] Add optional **tcpdump**-style 'who-has'/'is-at' output
 
-  * Request where `SPA == TPA` and dest MAC is broadcast.
-  * Reply/announcement where `SPA == TPA` and `THA` is broadcast or zeroed.
-* **Structured output**: CSV/JSON instead of plain text.
-* **CLI options**: `-i <iface>`, `-p/--no-promisc`, `-c <count>`, `-o json|text`, `--stats`.
-* **Stats & detection**: Track `(IP => MAC)` mappings, detect duplicates, add counters.
-* **Filtering**: optional BPF/cls filter for selective capture.
-* **Tests**: more parser cases (replies, truncation, wrong EtherType, invalid fields).
-* **Portability**: currently Linux-only; add Windows later.
 
 ## License
 
