@@ -27,7 +27,7 @@ sudo ./arp-sniffer \
 * [x] GARP detection
   \- Request where `SPA == TPA` and dest MAC is broadcast
 * [x] **Structured output**: CSV/JSON as option
-* [x] *CLI options*\*: `-i <iface>`, `-p/--no-promisc`, `-c <count>`, `-o json|text`
+* [x] *CLI options*\*: `-i <iface>`, `-p/--no-promisc`, `-c <count>`, `-f json|text`
 * [ ] **Stats & detection**: Track `(IP => MAC)` mappings, detect duplicates, add counters.
 * [ ] **Filtering**: optional BPF/cls filter for selective capture.
 * [ ] **Tests**: more parser cases (replies, truncation, wrong EtherType, invalid fields).
