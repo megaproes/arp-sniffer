@@ -14,8 +14,7 @@
 #include <netinet/in.h>
 #include <arpa/inet.h>
 #include <stdbool.h>
-static int bind_to_iface(int fd, const char *ifname, int promisc)
-{
+static int bind_to_iface(int fd, const char *ifname, int promisc) {
     unsigned ifindex = if_nametoindex(ifname);
     if (ifindex == 0)
     {
