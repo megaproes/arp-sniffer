@@ -78,8 +78,8 @@ ARP reply: 192.168.0.1 is at 58:47:ad:82:12:62
 
 - [x] GARP detection
       - Request where `SPA == TPA` and dest MAC is broadcast
-- [ ] **Structured output**: CSV/JSON as option 
-- [ ] *CLI options**: `-i <iface>`, `-p/--no-promisc`, `-c <count>`, `-o json|text`, `--stats`
+- [x] **Structured output**: CSV/JSON as option 
+- [x] *CLI options**: `-i <iface>`, `-p/--no-promisc`, `-c <count>`, `-o json|text`
 - [ ] **Stats & detection**: Track `(IP => MAC)` mappings, detect duplicates, add counters.
 - [ ] **Filtering**: optional BPF/cls filter for selective capture.
 - [ ] **Tests**: more parser cases (replies, truncation, wrong EtherType, invalid fields).
